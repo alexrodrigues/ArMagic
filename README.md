@@ -1,7 +1,7 @@
 # ArMagic
 Udacity's ARKit Final project
 
-Xcode 9 or later is required.
+Xcode 9.1 or later is required to run the project.
 
 1) Clone or download the project
 2) Open the xproject file
