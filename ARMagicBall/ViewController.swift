@@ -15,7 +15,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     private let HAT_IDENTIFIER = "hat"
+    private let PLANE_IDENTIFIER = "plane"
     private let BALL_IDENTIFIER = "magic_ball"
+    
+    private var isBallsHidden = false
+    
     
     @IBAction func throwBall() {
         guard let ballNode = loadMagicBall() else { return }
@@ -24,14 +28,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func magic() {
+        isBallsHidden = !isBallsHidden
+        
         let nodes = sceneView.scene.rootNode.childNodes
         for node in nodes {
             if  let nodeName =  node.name {
                 if nodeName == BALL_IDENTIFIER {
-                    node.removeFromParentNode()
+                    changeOpacity(node: node, isHidden: isBallsHidden)
                 }
             } else {
-                node.removeFromParentNode()
+                changeOpacity(node: node, isHidden: isBallsHidden)
             }
         }
     }
@@ -40,7 +46,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewDidLoad()
         sceneView.delegate = self
         sceneView.showsStatistics = false
-//        sceneView.debugOptions = [.showPhysicsShapes]
+        sceneView.debugOptions = [.showPhysicsShapes]
         placeHat()
     }
     
@@ -71,9 +77,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     private func putBallOnCamera(ballNode : SCNNode) {
-        let camera = sceneView.session.currentFrame?.camera
-        let cameraTransform = camera?.transform
-        ballNode.simdTransform = cameraTransform!
+        /*
+            Hello mr reviewer. When I set the simdTransform of the ballNode am I setting the rotation too? I can't find on stackoverflow the solution of get the user's camera rotation, please can you give more details to help me?
+        */
+        guard let camera = sceneView.session.currentFrame?.camera else { return }
+        
+        
+        /*!
+         @abstract Determines the receiver's transform. Animatable.
+         @discussion The transform is the combination of the position, rotation and scale defined below. So when the transform is set, the receiver's position, rotation and scale are changed to match the new transform.
+         
+         
+            @available(iOS 11.0, *)
+            open var simdTransform: simd_float4x4
+         
+         */
+
+        ballNode.simdTransform = camera.transform
+        
         sceneView.scene.rootNode.addChildNode(ballNode)
     }
     
@@ -82,6 +103,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         physicsBody.applyForce(forceDirection, asImpulse: true)
         ballNode.physicsBody = physicsBody
+    }
+    
+    private func changeOpacity(node : SCNNode, isHidden : Bool) {
+        var opacity = 0
+        if !isHidden {
+            opacity = 1
+        }
+        
+        SCNTransaction.begin()
+        node.opacity = CGFloat(opacity)
+        SCNTransaction.animationDuration = 2
+        SCNTransaction.commit()
     }
     
     override func didReceiveMemoryWarning() {
@@ -105,10 +138,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         guard let hatNode = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return nil }
         
-        SCNTransaction.begin()
-        hatNode.opacity = 1
-        SCNTransaction.animationDuration = 2
-        SCNTransaction.commit()
+        changeOpacity(node: hatNode, isHidden: false)
         
         return hatNode
     }
