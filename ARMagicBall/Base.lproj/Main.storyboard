@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,9 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="asI-3g-cyq">
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asI-3g-cyq">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </arscnView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="b8e-S6-1jc">
                                 <rect key="frame" x="16" y="593" width="343" height="58"/>
@@ -56,7 +55,11 @@
                         <constraints>
                             <constraint firstItem="4lV-O0-oKk" firstAttribute="trailing" secondItem="b8e-S6-1jc" secondAttribute="trailing" constant="16" id="10p-Gi-Rez"/>
                             <constraint firstItem="b8e-S6-1jc" firstAttribute="leading" secondItem="4lV-O0-oKk" secondAttribute="leading" constant="16" id="1YP-c1-PHH"/>
+                            <constraint firstItem="asI-3g-cyq" firstAttribute="top" secondItem="4lV-O0-oKk" secondAttribute="top" id="8OA-LF-Zcp"/>
+                            <constraint firstItem="asI-3g-cyq" firstAttribute="leading" secondItem="4lV-O0-oKk" secondAttribute="leading" id="W87-JP-IJy"/>
                             <constraint firstItem="4lV-O0-oKk" firstAttribute="bottom" secondItem="b8e-S6-1jc" secondAttribute="bottom" constant="16" id="jmY-qr-mb2"/>
+                            <constraint firstItem="asI-3g-cyq" firstAttribute="trailing" secondItem="4lV-O0-oKk" secondAttribute="trailing" id="sOc-3C-mMi"/>
+                            <constraint firstItem="asI-3g-cyq" firstAttribute="bottom" secondItem="4lV-O0-oKk" secondAttribute="bottom" id="tSh-f0-chI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4lV-O0-oKk"/>
                     </view>
