@@ -15,27 +15,36 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     private let HAT_IDENTIFIER = "hat"
+    private let HAT_TUBE_IDENTIFIER = "hat_tube"
     private let PLANE_IDENTIFIER = "plane"
     private let BALL_IDENTIFIER = "magic_ball"
     
-    private var isBallsHidden = false
+    private var balls = [SCNNode]()
     
     @IBAction func throwBall() {
         guard let ballNode = loadMagicBall() else { return }
         putBallOnCamera(ballNode: ballNode)
         applyGravityOn(ballNode: ballNode)
+        balls.append(ballNode)
     }
     
     @IBAction func magic() {
-        // I know i am trying to fix this. I wonder if there is a way to find out if a SCNNode is inside another or the distance between is small. In my research's I not finding anything. Wait because the next review I will made this.
-        isBallsHidden = !isBallsHidden
         guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
-        let nodes = sceneView.scene.rootNode.childNodes
-        for node in nodes {
-            if  node.position.length() > hat.position.length() && node.name != HAT_IDENTIFIER {
-                changeOpacity(node: node, isHidden: isBallsHidden)
+        guard let hatTube = hat.childNode(withName: HAT_TUBE_IDENTIFIER, recursively: true) else { return }
+        
+        
+        let (boxMin, boxMax): (SCNVector3, SCNVector3) = hatTube.boundingBox
+        let min = hatTube.worldPosition + boxMin
+        let max = hatTube.worldPosition  + boxMax
+            
+        for ball in balls {
+            // Thanks for the logic, I am having difficult to check if a SCNVector3 is inside the range of another. Can you please help me? The SCNVector3 is very poor!
+            if (ball.position.x > min.x && ball.position.y > min.y && ball.position.z > min.z) &&
+                (ball.position.x < max.x && ball.position.y < max.y && ball.position.z < min.z) {
+                ball.isHidden = !ball.isHidden
             }
         }
+        
     }
     
     override func viewDidLoad() {
@@ -85,7 +94,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.scene.rootNode.addChildNode(ballNode)
     }
     
-    // Thank you 😊
     private func camera() -> (SCNVector3, SCNVector3) {
         if let frame = self.sceneView.session.currentFrame {
             let mat =  SCNMatrix4(frame.camera.transform)
