@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		046CEE391FB2815100FF8CFE /* SCNNode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CEE381FB2815100FF8CFE /* SCNNode+Extensions.swift */; };
 		0490C76E1FA147B400570B0E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0490C76D1FA147B400570B0E /* AppDelegate.swift */; };
 		0490C7701FA147B400570B0E /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 0490C76F1FA147B400570B0E /* art.scnassets */; };
 		0490C7721FA147B400570B0E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0490C7711FA147B400570B0E /* ViewController.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		046CEE381FB2815100FF8CFE /* SCNNode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extensions.swift"; sourceTree = "<group>"; };
 		0490C76A1FA147B400570B0E /* ARMagicBall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARMagicBall.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0490C76D1FA147B400570B0E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0490C76F1FA147B400570B0E /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -103,13 +105,14 @@
 		0490C76C1FA147B400570B0E /* ARMagicBall */ = {
 			isa = PBXGroup;
 			children = (
+				046CEE381FB2815100FF8CFE /* SCNNode+Extensions.swift */,
+				0490C77B1FA147B400570B0E /* Info.plist */,
 				0490C76D1FA147B400570B0E /* AppDelegate.swift */,
 				0490C76F1FA147B400570B0E /* art.scnassets */,
 				0490C7711FA147B400570B0E /* ViewController.swift */,
 				0490C7731FA147B400570B0E /* Main.storyboard */,
 				0490C7761FA147B400570B0E /* Assets.xcassets */,
 				0490C7781FA147B400570B0E /* LaunchScreen.storyboard */,
-				0490C77B1FA147B400570B0E /* Info.plist */,
 				0490C79D1FA1482E00570B0E /* magic.scn */,
 				04B6C4131FAB6DF500B4CC61 /* ball.scn */,
 			);
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				046CEE391FB2815100FF8CFE /* SCNNode+Extensions.swift in Sources */,
 				0490C7721FA147B400570B0E /* ViewController.swift in Sources */,
 				0490C76E1FA147B400570B0E /* AppDelegate.swift in Sources */,
 			);

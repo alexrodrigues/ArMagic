@@ -20,7 +20,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     private var isBallsHidden = false
     
-    
     @IBAction func throwBall() {
         guard let ballNode = loadMagicBall() else { return }
         putBallOnCamera(ballNode: ballNode)
@@ -28,15 +27,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func magic() {
+        // I know i am trying to fix this. I wonder if there is a way to find out if a SCNNode is inside another or the distance between is small. In my research's I not finding anything. Wait because the next review I will made this.
         isBallsHidden = !isBallsHidden
-        
+        guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
         let nodes = sceneView.scene.rootNode.childNodes
         for node in nodes {
-            if  let nodeName =  node.name {
-                if nodeName == BALL_IDENTIFIER {
-                    changeOpacity(node: node, isHidden: isBallsHidden)
-                }
-            } else {
+            if  node.position.length() > hat.position.length() && node.name != HAT_IDENTIFIER {
                 changeOpacity(node: node, isHidden: isBallsHidden)
             }
         }
@@ -46,7 +42,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewDidLoad()
         sceneView.delegate = self
         sceneView.showsStatistics = false
-        sceneView.debugOptions = [.showPhysicsShapes]
         placeHat()
     }
     
@@ -62,11 +57,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     private func placeHat() {
         guard let scene = SCNScene(named: "art.scnassets/magic.scn") else {
             return
         }
         sceneView.scene = scene
+    }
+    
+    private func isInsideHat() {
+        
     }
     
     private func loadMagicBall() -> SCNNode? {
@@ -77,29 +80,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     private func putBallOnCamera(ballNode : SCNNode) {
-        /*
-            Hello mr reviewer. When I set the simdTransform of the ballNode am I setting the rotation too? I can't find on stackoverflow the solution of get the user's camera rotation, please can you give more details to help me?
-        */
         guard let camera = sceneView.session.currentFrame?.camera else { return }
-        
-        
-        /*!
-         @abstract Determines the receiver's transform. Animatable.
-         @discussion The transform is the combination of the position, rotation and scale defined below. So when the transform is set, the receiver's position, rotation and scale are changed to match the new transform.
-         
-         
-            @available(iOS 11.0, *)
-            open var simdTransform: simd_float4x4
-         
-         */
-
         ballNode.simdTransform = camera.transform
-        
         sceneView.scene.rootNode.addChildNode(ballNode)
     }
     
+    // Thank you 😊
+    private func camera() -> (SCNVector3, SCNVector3) {
+        if let frame = self.sceneView.session.currentFrame {
+            let mat =  SCNMatrix4(frame.camera.transform)
+            let dir = SCNVector3(-2 * mat.m31, -2 * mat.m32, -2 * mat.m33)
+            let pos = SCNVector3(mat.m41, mat.m42, mat.m43)
+            return (dir, pos)
+        }
+        return (SCNVector3(0, 0, -1), SCNVector3(0, 0, -0.2))
+    }
+    
     private func applyGravityOn(ballNode : SCNNode) {
-        let forceDirection = SCNVector3Make(0, -1, -2)
+        let forceDirection = camera().0
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         physicsBody.applyForce(forceDirection, asImpulse: true)
         ballNode.physicsBody = physicsBody
@@ -117,10 +115,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         SCNTransaction.commit()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     // MARK: - ARSCNViewDelegate
     func session(_ session: ARSession, didFailWithError error: Error) {
     }
