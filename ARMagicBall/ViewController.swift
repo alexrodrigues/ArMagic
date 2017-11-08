@@ -38,7 +38,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let max = hatTube.worldPosition  + boxMax
             
         for ball in balls {
-            // Thanks for the logic, I am having difficult to check if a SCNVector3 is inside the range of another. Can you please help me? The SCNVector3 is very poor!
+            // Thanks for the help. I am having trouble to check if a SCNVector3 is inside the range of another. Can you explaining more how can I get that information of a SCNVector3? The SCNVector3 doc is very poor!
             if (ball.position.x > min.x && ball.position.y > min.y && ball.position.z > min.z) &&
                 (ball.position.x < max.x && ball.position.y < max.y && ball.position.z < min.z) {
                 ball.isHidden = !ball.isHidden
