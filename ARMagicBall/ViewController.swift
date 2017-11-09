@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
-
+    
     @IBOutlet var sceneView: ARSCNView!
     
     private let HAT_IDENTIFIER = "hat"
@@ -29,19 +29,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func magic() {
-        guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
-        guard let hatTube = hat.childNode(withName: HAT_TUBE_IDENTIFIER, recursively: true) else { return }
+        // Thanks for the help. I am having trouble to check if a SCNVector3 is inside the range of another. Can you explaining more how can I get that information of a SCNVector3? The SCNVector3 doc is very poor!
+        guard let hatTube = sceneView.scene.rootNode.childNode(withName: HAT_TUBE_IDENTIFIER, recursively: true) else { return }
         
         
         let (boxMin, boxMax): (SCNVector3, SCNVector3) = hatTube.boundingBox
         let min = hatTube.worldPosition + boxMin
         let max = hatTube.worldPosition  + boxMax
-            
+        
+        print("max: x - \(max.x) y - \(max.y) z - \(max.z)")
+        print("min: x - \(min.x) y - \(min.y) z - \(min.z)")
+        
         for ball in balls {
-            // Thanks for the help. I am having trouble to check if a SCNVector3 is inside the range of another. Can you explaining more how can I get that information of a SCNVector3? The SCNVector3 doc is very poor!
-            if (ball.position.x > min.x && ball.position.y > min.y && ball.position.z > min.z) &&
-                (ball.position.x < max.x && ball.position.y < max.y && ball.position.z < min.z) {
+            if (ball.position.x >= min.x && ball.position.y >= min.y && ball.position.z >= min.z) &&
+                (ball.position.x <= max.x && ball.position.y <= max.y && ball.position.z <= max.z) {
+                print("bolinha: x - \(ball.position.x) y - \(ball.position.y) z - \(ball.position.z)")
                 ball.isHidden = !ball.isHidden
+            } else {
+                print("nao entrei no if")
             }
         }
         
@@ -148,3 +153,4 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
     }
 }
+
