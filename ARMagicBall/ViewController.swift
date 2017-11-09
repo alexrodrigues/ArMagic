@@ -43,10 +43,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         for ball in balls {
             if (ball.position.x >= min.x && ball.position.y >= min.y && ball.position.z >= min.z) &&
                 (ball.position.x <= max.x && ball.position.y <= max.y && ball.position.z <= max.z) {
-                print("bolinha: x - \(ball.position.x) y - \(ball.position.y) z - \(ball.position.z)")
+                print("ball: x - \(ball.position.x) y - \(ball.position.y) z - \(ball.position.z)")
                 ball.isHidden = !ball.isHidden
             } else {
-                print("nao entrei no if")
+                print("failed")
             }
         }
         
