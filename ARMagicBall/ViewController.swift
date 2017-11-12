@@ -29,27 +29,29 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func magic() {
-        // Thanks for the help. I am having trouble to check if a SCNVector3 is inside the range of another. Can you explaining more how can I get that information of a SCNVector3? The SCNVector3 doc is very poor!
-        guard let hatTube = sceneView.scene.rootNode.childNode(withName: HAT_TUBE_IDENTIFIER, recursively: true) else { return }
+        guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
+//        guard let hatTube = sceneView.scene.rootNode.childNode(withName: HAT_TUBE_IDENTIFIER, recursively: true) else { return }
         
+         let hatWorldPosition = hat.worldPosition
         
-        let (boxMin, boxMax): (SCNVector3, SCNVector3) = hatTube.boundingBox
-        let min = hatTube.worldPosition + boxMin
-        let max = hatTube.worldPosition  + boxMax
+        let (tubeMin, tubeMax): (SCNVector3, SCNVector3) = hat.boundingBox
+
         
-        print("max: x - \(max.x) y - \(max.y) z - \(max.z)")
-        print("min: x - \(min.x) y - \(min.y) z - \(min.z)")
+        let minX = hatWorldPosition.x + tubeMin.x
+        let minY = hatWorldPosition.y + tubeMin.y
+        let minZ = hatWorldPosition.z + tubeMin.z
+        
+        let maxX = hatWorldPosition.x + tubeMax.x
+        let maxY = hatWorldPosition.y + tubeMax.y
+        let maxZ = hatWorldPosition.z + tubeMax.z
         
         for ball in balls {
-            if (ball.position.x >= min.x && ball.position.y >= min.y && ball.position.z >= min.z) &&
-                (ball.position.x <= max.x && ball.position.y <= max.y && ball.position.z <= max.z) {
-                print("ball: x - \(ball.position.x) y - \(ball.position.y) z - \(ball.position.z)")
+            let pos = ball.presentation.worldPosition
+            let isInsideHat = ((pos.x >= minX && pos.y >= minY && pos.z >= minZ) && (pos.x <= maxX && pos.y <= maxY && pos.z <= maxZ))
+            if isInsideHat {
                 ball.isHidden = !ball.isHidden
-            } else {
-                print("failed")
             }
         }
-        
     }
     
     override func viewDidLoad() {
