@@ -16,6 +16,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     private let HAT_IDENTIFIER = "hat"
     private let HAT_TUBE_IDENTIFIER = "hat_tube"
+    private let HAT_BASE_IDENTIFIER = "hat_base"
+    private let HAT_TOP_IDENTIFIER = "hat_top"
+    private let HAT_WITH_FLOOR_IDENTIFIER = "hat_with_floor"
     private let PLANE_IDENTIFIER = "plane"
     private let BALL_IDENTIFIER = "magic_ball"
     
@@ -30,9 +33,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func magic() {
         guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
-//        guard let hatTube = sceneView.scene.rootNode.childNode(withName: HAT_TUBE_IDENTIFIER, recursively: true) else { return }
-        
-         let hatWorldPosition = hat.worldPosition
+        let hatWorldPosition = hat.worldPosition
         
         let (tubeMin, tubeMax): (SCNVector3, SCNVector3) = hat.boundingBox
 
@@ -47,8 +48,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         for ball in balls {
             let pos = ball.presentation.worldPosition
+            print("x-> \(pos.x)   y-> \(pos.y)   z-> \(pos.z)")
             let isInsideHat = ((pos.x >= minX && pos.y >= minY && pos.z >= minZ) && (pos.x <= maxX && pos.y <= maxY && pos.z <= maxZ))
-            if isInsideHat {
+            // because the floor is inside the hat node
+            let isOutsideHat = (pos.z < -1.0)
+            if isInsideHat && !isOutsideHat {
                 ball.isHidden = !ball.isHidden
             }
         }
@@ -148,6 +152,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         guard let hatNode = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return nil }
         
         changeOpacity(node: hatNode, isHidden: false)
+        
         
         return hatNode
     }
