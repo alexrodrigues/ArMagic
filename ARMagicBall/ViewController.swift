@@ -81,6 +81,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.didReceiveMemoryWarning()
     }
     
+    private func isOnTheFloor() {
+        // trabalhar com o width e o height do floor para excluir o mesmo do hat node
+    }
+    
     private func placeHat() {
         guard let scene = SCNScene(named: "art.scnassets/magic.scn") else {
             return
