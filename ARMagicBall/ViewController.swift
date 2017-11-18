@@ -15,12 +15,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     private let HAT_IDENTIFIER = "hat"
-    private let HAT_TUBE_IDENTIFIER = "hat_tube"
-    private let HAT_BASE_IDENTIFIER = "hat_base"
-    private let HAT_TOP_IDENTIFIER = "hat_top"
-    private let HAT_WITH_FLOOR_IDENTIFIER = "hat_with_floor"
-    private let PLANE_IDENTIFIER = "plane"
+    
     private let BALL_IDENTIFIER = "magic_ball"
+    
+    // My floor is inside the hat node. So when I try to calculate the x and z axis I will get 2000000 width. To fix I am considering the hat width bellow
+    private let HAT_WIDTH = 0.582
     
     private var balls = [SCNNode]()
     
@@ -29,7 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         putBallOnCamera(ballNode: ballNode)
         applyGravityOn(ballNode: ballNode)
         balls.append(ballNode)
-    }
+    } 
     
     @IBAction func magic() {
         guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
@@ -38,22 +37,29 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let (tubeMin, tubeMax): (SCNVector3, SCNVector3) = hat.boundingBox
 
         
-        let minX = hatWorldPosition.x + tubeMin.x
+        let minX = Float(-HAT_WIDTH)
         let minY = hatWorldPosition.y + tubeMin.y
-        let minZ = hatWorldPosition.z + tubeMin.z
+        let minZ = Float(-HAT_WIDTH)
         
-        let maxX = hatWorldPosition.x + tubeMax.x
+        let maxX = Float(HAT_WIDTH)
         let maxY = hatWorldPosition.y + tubeMax.y
-        let maxZ = hatWorldPosition.z + tubeMax.z
+        let maxZ = Float(HAT_WIDTH)
+        
+        print("min \(minX) \(minY) \(minZ)")
+        
+        print("max \(maxX) \(maxY) \(maxZ)")
         
         for ball in balls {
             let pos = ball.presentation.worldPosition
             print("x-> \(pos.x)   y-> \(pos.y)   z-> \(pos.z)")
             let isInsideHat = ((pos.x >= minX && pos.y >= minY && pos.z >= minZ) && (pos.x <= maxX && pos.y <= maxY && pos.z <= maxZ))
             // because the floor is inside the hat node
-            let isOutsideHat = (pos.z < -1.0)
-            if isInsideHat && !isOutsideHat {
+     
+            if isInsideHat {
+                print("estou dentro do chapeu \(pos.x) \(pos.y) \(pos.z)")
                 ball.isHidden = !ball.isHidden
+            } else {
+                print("estou fora do chapeu \(pos.x) \(pos.y) \(pos.z)")
             }
         }
     }
@@ -82,7 +88,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     private func isOnTheFloor() {
-        // trabalhar com o width e o height do floor para excluir o mesmo do hat node
+//        (pos.z < -1.0)
     }
     
     private func placeHat() {
