@@ -18,7 +18,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     private let BALL_IDENTIFIER = "magic_ball"
     
-    // My floor is inside the hat node. So when I try to calculate the x and z axis I will get 2000000 width. To fix I am considering the hat width bellow
     private let HAT_WIDTH = 0.582
     
     private var balls = [SCNNode]()
@@ -28,22 +27,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         putBallOnCamera(ballNode: ballNode)
         applyGravityOn(ballNode: ballNode)
         balls.append(ballNode)
-    } 
+    }
     
     @IBAction func magic() {
+        /*
+            My biggest problem is that I added the floor node inside the hat node. So I have the wrong x and z axis because the floor is considered too.
+            After change tubeMin.x to Hat width, I think I fixed the problem as you can see on ar_magic.mp4. Please give me your feedback too!
+            Thank you and so sorry to took your time on so many reviews. But I am trully learning on Udacity!
+        */
+        
         guard let hat = sceneView.scene.rootNode.childNode(withName: HAT_IDENTIFIER, recursively: true) else { return }
         let hatWorldPosition = hat.worldPosition
         
         let (tubeMin, tubeMax): (SCNVector3, SCNVector3) = hat.boundingBox
 
         
-        let minX = Float(-HAT_WIDTH)
+        let minX = hatWorldPosition.x + Float(-HAT_WIDTH)
         let minY = hatWorldPosition.y + tubeMin.y
-        let minZ = Float(-HAT_WIDTH)
+        let minZ = hatWorldPosition.z + Float(-HAT_WIDTH)
         
-        let maxX = Float(HAT_WIDTH)
+        let maxX = hatWorldPosition.x + Float(HAT_WIDTH)
         let maxY = hatWorldPosition.y + tubeMax.y
-        let maxZ = Float(HAT_WIDTH)
+        let maxZ = hatWorldPosition.z + Float(HAT_WIDTH)
         
         print("min \(minX) \(minY) \(minZ)")
         

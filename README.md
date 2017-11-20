@@ -9,3 +9,7 @@ Xcode 9.1 or later is required to run the project.
 4) Aim to a surface or plane floor
 5) Wait until the hat shows up
 6) Throw the ball and have fun!
+
+====  To see the final trick check out ar_magic.mp4 video in the root file ==== 
+
+
