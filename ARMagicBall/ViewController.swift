@@ -50,21 +50,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let maxY = hatWorldPosition.y + tubeMax.y
         let maxZ = hatWorldPosition.z + Float(HAT_WIDTH)
         
-        print("min \(minX) \(minY) \(minZ)")
-        
-        print("max \(maxX) \(maxY) \(maxZ)")
-        
         for ball in balls {
             let pos = ball.presentation.worldPosition
-            print("x-> \(pos.x)   y-> \(pos.y)   z-> \(pos.z)")
             let isInsideHat = ((pos.x >= minX && pos.y >= minY && pos.z >= minZ) && (pos.x <= maxX && pos.y <= maxY && pos.z <= maxZ))
-            // because the floor is inside the hat node
-     
             if isInsideHat {
-                print("estou dentro do chapeu \(pos.x) \(pos.y) \(pos.z)")
                 ball.isHidden = !ball.isHidden
             } else {
-                print("estou fora do chapeu \(pos.x) \(pos.y) \(pos.z)")
             }
         }
     }
